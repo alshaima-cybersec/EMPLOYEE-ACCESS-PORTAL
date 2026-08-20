@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Home — Vulnerable Portal{% endblock %}
+{% block content %}
+<div class="card">
+    <div class="card-header">Acme Corp Employee Access Portal (Vulnerable Demo)</div>
+    <div class="card-body">
+        <h1 class="h4">Welcome</h1>
+        <p>This is the intentionally vulnerable version of the Employee Access Portal, built for a
+        university cybersecurity assessment. It demonstrates weak password storage, weak password
+        policy, broken access control, unlimited login attempts, insecure session handling, and
+        missing audit logging.</p>
+        <p>Compare this application's behavior against the <code>secure_portal</code> to see how
+        each weakness was mitigated.</p>
+        {% if not user %}
+        <a href="{{ url_for('login') }}" class="btn btn-primary">Login</a>
+        {% else %}
+        <a href="{{ url_for('employee_dashboard') }}" class="btn btn-primary">Go to Dashboard</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

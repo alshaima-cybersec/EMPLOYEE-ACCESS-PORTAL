@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Audit Logs — Vulnerable Portal{% endblock %}
+{% block content %}
+<h1 class="h4 mb-3">Audit Logs</h1>
+<div class="alert alert-danger">
+    This table is intentionally always empty. The vulnerable application does not record any
+    security events (logins, failures, lockouts, admin access, password changes, etc.).
+    Compare this against the secure_portal audit log, which populates every one of these events.
+</div>
+<div class="card">
+    <div class="card-body p-0">
+        <table class="table mb-0">
+            <thead>
+                <tr><th>Timestamp</th><th>User</th><th>Event</th><th>Result</th><th>IP Address</th></tr>
+            </thead>
+            <tbody>
+            {% for log in logs %}
+                <tr>
+                    <td>{{ log.timestamp }}</td>
+                    <td>{{ log.username }}</td>
+                    <td>{{ log.event_type }}</td>
+                    <td>{{ log.result }}</td>
+                    <td>{{ log.ip_address }}</td>
+                </tr>
+            {% else %}
+                <tr><td colspan="5" class="text-center text-muted">No audit events recorded (by design — this is a demonstrated weakness).</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

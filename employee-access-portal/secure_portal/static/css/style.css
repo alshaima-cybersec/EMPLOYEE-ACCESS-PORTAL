@@ -1,0 +1,66 @@
+/* Enterprise-clean styling layer on top of Bootstrap */
+
+body {
+    background-color: #f4f6f8;
+    color: #1f2937;
+}
+
+.navbar-brand {
+    font-weight: 600;
+    letter-spacing: 0.02em;
+}
+
+.info-banner {
+    background-color: #14532d;
+    color: #fff;
+    text-align: center;
+    padding: 0.5rem 1rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+}
+
+.card {
+    border: none;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.card-header {
+    background-color: #111827;
+    color: #fff;
+    border-radius: 0.5rem 0.5rem 0 0 !important;
+    font-weight: 600;
+}
+
+.table thead th {
+    background-color: #111827;
+    color: #fff;
+}
+
+.btn-primary {
+    background-color: #1d4ed8;
+    border-color: #1d4ed8;
+}
+
+.btn-primary:hover {
+    background-color: #1e40af;
+    border-color: #1e40af;
+}
+
+.stat-card {
+    background-color: #fff;
+    border-radius: 0.5rem;
+    padding: 1.25rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+footer {
+    color: #6b7280;
+    font-size: 0.85rem;
+    text-align: center;
+    padding: 1.5rem 0;
+}
+
+.form-text.password-rules {
+    font-size: 0.85rem;
+}

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}User Management — Vulnerable Portal{% endblock %}
+{% block content %}
+<h1 class="h4 mb-3">User Management</h1>
+<div class="alert alert-warning">
+    The "Toggle Active" action below is a state-changing GET request with no CSRF protection and
+    no server-side admin check — reachable by any logged-in user, and not written to any audit log.
+</div>
+<div class="card">
+    <div class="card-body p-0">
+        <table class="table mb-0 align-middle">
+            <thead>
+                <tr><th>Name</th><th>Email</th><th>Role</th><th>Status</th><th>Action</th></tr>
+            </thead>
+            <tbody>
+            {% for u in all_users %}
+                <tr>
+                    <td>{{ u.full_name }}</td>
+                    <td>{{ u.email }}</td>
+                    <td class="text-capitalize">{{ u.role }}</td>
+                    <td>{{ "Active" if u.is_active else "Disabled" }}</td>
+                    <td>
+                        <a href="{{ url_for('toggle_active', target_id=u.id) }}" class="btn btn-sm btn-outline-secondary">
+                            {{ "Disable" if u.is_active else "Enable" }}
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

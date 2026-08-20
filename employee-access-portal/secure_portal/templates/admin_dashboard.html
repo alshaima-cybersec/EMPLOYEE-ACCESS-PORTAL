@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard — Secure Portal{% endblock %}
+{% block content %}
+<h1 class="h4 mb-3">Admin Dashboard</h1>
+
+<div class="alert alert-success">
+    This route enforces server-side role-based access control on every request via the
+    <code>@admin_required</code> decorator, which re-validates the role against the database.
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-3">
+        <div class="stat-card">
+            <div class="text-muted small">Total users</div>
+            <div class="h5">{{ all_users|length }}</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card">
+            <div class="text-muted small">Active accounts</div>
+            <div class="h5">{{ all_users|selectattr("is_active")|list|length }}</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card">
+            <div class="text-muted small">Admins</div>
+            <div class="h5">{{ all_users|selectattr("role", "equalto", "admin")|list|length }}</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card">
+            <div class="text-muted small">Locked accounts</div>
+            <div class="h5">{{ all_users|selectattr("locked_until")|list|length }}</div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">All Users</div>
+    <div class="card-body p-0">
+        <table class="table mb-0">
+            <thead>
+                <tr><th>Name</th><th>Email</th><th>Role</th><th>Status</th><th>Locked?</th></tr>
+            </thead>
+            <tbody>
+            {% for u in all_users %}
+                <tr>
+                    <td>{{ u.full_name }}</td>
+                    <td>{{ u.email }}</td>
+                    <td class="text-capitalize">{{ u.role }}</td>
+                    <td>{{ "Active" if u.is_active else "Disabled" }}</td>
+                    <td>{{ "Yes" if u.is_locked() else "No" }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<p class="mt-3"><a href="{{ url_for('user_management') }}" class="btn btn-outline-primary">Manage Users</a></p>
+{% endblock %}

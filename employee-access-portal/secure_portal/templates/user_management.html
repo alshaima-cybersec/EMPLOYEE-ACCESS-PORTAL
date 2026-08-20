@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}User Management — Secure Portal{% endblock %}
+{% block content %}
+<h1 class="h4 mb-3">User Management</h1>
+<div class="alert alert-success">
+    Every action below is a CSRF-protected POST request, restricted to administrators only, and
+    recorded in the audit log.
+</div>
+<div class="card">
+    <div class="card-body p-0">
+        <table class="table mb-0 align-middle">
+            <thead>
+                <tr><th>Name</th><th>Email</th><th>Role</th><th>Status</th><th>Locked?</th><th>Actions</th></tr>
+            </thead>
+            <tbody>
+            {% for u in all_users %}
+                <tr>
+                    <td>{{ u.full_name }}</td>
+                    <td>{{ u.email }}</td>
+                    <td class="text-capitalize">{{ u.role }}</td>
+                    <td>{{ "Active" if u.is_active else "Disabled" }}</td>
+                    <td>{{ "Yes" if u.is_locked() else "No" }}</td>
+                    <td>
+                        <div class="d-flex flex-wrap gap-1">
+                            <form method="POST" action="{{ url_for('toggle_active', target_id=u.id) }}" class="d-inline">
+                                {{ form.hidden_tag() }}
+                                <button type="submit" class="btn btn-sm btn-outline-secondary">
+                                    {{ "Disable" if u.is_active else "Enable" }}
+                                </button>
+                            </form>
+                            {% if u.is_locked() %}
+                            <form method="POST" action="{{ url_for('unlock_account', target_id=u.id) }}" class="d-inline">
+                                {{ form.hidden_tag() }}
+                                <button type="submit" class="btn btn-sm btn-outline-warning">Unlock</button>
+                            </form>
+                            {% endif %}
+                            <form method="POST" action="{{ url_for('change_role', target_id=u.id) }}" class="d-inline-flex gap-1">
+                                {{ role_form.hidden_tag() }}
+                                <select name="role" class="form-select form-select-sm" style="width:auto;">
+                                    <option value="employee" {% if u.role == 'employee' %}selected{% endif %}>Employee</option>
+                                    <option value="admin" {% if u.role == 'admin' %}selected{% endif %}>Administrator</option>
+                                </select>
+                                <button type="submit" class="btn btn-sm btn-outline-primary">Set Role</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

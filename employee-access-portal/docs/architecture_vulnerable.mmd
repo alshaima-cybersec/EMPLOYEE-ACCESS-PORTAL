@@ -1,0 +1,27 @@
+flowchart TD
+    Browser["Browser (localhost)"]
+
+    subgraph FlaskApp["vulnerable_portal (Flask, port 5000)"]
+        Login["/login route\n(no lockout, no rate limit)"]
+        Session["Session\n(no timeout, HttpOnly=False)"]
+        AdminRoute["/admin, /users, /audit-logs\n(session-presence check only)"]
+        ChangePw["/change-password\n(no complexity check)"]
+    end
+
+    subgraph DB["SQLite: vulnerable.db"]
+        UsersTable["users\n(password = unsalted MD5)"]
+        AuditTable["audit_log\n(never written to)"]
+    end
+
+    Browser -->|"credentials"| Login
+    Login -->|"check_password (MD5 compare)"| UsersTable
+    Login -->|"set session['role'] from login-time value"| Session
+    Browser -->|"direct URL, any role"| AdminRoute
+    AdminRoute -.->|"role trusted from session, not re-checked"| Session
+    AdminRoute --> UsersTable
+    Browser --> ChangePw
+    ChangePw --> UsersTable
+
+    style AdminRoute fill:#7f1d1d,color:#fff
+    style UsersTable fill:#7f1d1d,color:#fff
+    style AuditTable fill:#7f1d1d,color:#fff

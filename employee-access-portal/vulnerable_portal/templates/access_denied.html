@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Access Denied — Vulnerable Portal{% endblock %}
+{% block content %}
+<div class="text-center py-5">
+    <h1 class="h3">Access Denied</h1>
+    <p class="text-muted">This page exists for structural parity with the secure version. Note
+    that the vulnerable app rarely routes here in practice, because most of its access-control
+    checks are missing rather than actively denying access.</p>
+    <a href="{{ url_for('home') }}" class="btn btn-primary">Return Home</a>
+</div>
+{% endblock %}

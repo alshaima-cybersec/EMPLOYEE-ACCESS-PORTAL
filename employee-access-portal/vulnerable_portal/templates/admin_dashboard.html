@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard — Vulnerable Portal{% endblock %}
+{% block content %}
+<h1 class="h4 mb-3">Admin Dashboard</h1>
+
+<div class="alert alert-warning">
+    This page performs no server-side role verification beyond checking that a session exists.
+    Any logged-in user — regardless of role — can reach this page by typing the URL directly.
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <div class="stat-card">
+            <div class="text-muted small">Total users</div>
+            <div class="h5">{{ all_users|length }}</div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="stat-card">
+            <div class="text-muted small">Active accounts</div>
+            <div class="h5">{{ all_users|selectattr("is_active")|list|length }}</div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="stat-card">
+            <div class="text-muted small">Admins</div>
+            <div class="h5">{{ all_users|selectattr("role", "equalto", "admin")|list|length }}</div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">All Users</div>
+    <div class="card-body p-0">
+        <table class="table mb-0">
+            <thead>
+                <tr><th>Name</th><th>Email</th><th>Role</th><th>Status</th></tr>
+            </thead>
+            <tbody>
+            {% for u in all_users %}
+                <tr>
+                    <td>{{ u.full_name }}</td>
+                    <td>{{ u.email }}</td>
+                    <td class="text-capitalize">{{ u.role }}</td>
+                    <td>{{ "Active" if u.is_active else "Disabled" }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,36 @@
+flowchart TD
+    Browser["Browser (localhost)"]
+
+    subgraph FlaskApp["secure_portal (Flask, port 5001)"]
+        CSRF["Flask-WTF CSRF Protection\n(all forms)"]
+        Login["/login route\n(lockout after 5 failures, generic errors)"]
+        SessionMgmt["Session Manager\n(15-min timeout, HttpOnly, SameSite=Lax,\nregenerated on login)"]
+        RBAC["@admin_required decorator\n(server-side role re-check per request)"]
+        AdminRoutes["/admin, /users, /audit-logs"]
+        ChangePw["/change-password\n(Flask-WTF complexity validator)"]
+        AuditLogger["log_event() helper"]
+    end
+
+    subgraph DB["SQLite: secure.db"]
+        UsersTable["users\n(password_hash = salted Werkzeug hash,\nfailed_attempts, locked_until)"]
+        AuditTable["audit_log\n(every security event recorded)"]
+    end
+
+    Browser -->|"credentials + CSRF token"| CSRF
+    CSRF --> Login
+    Login -->|"check_password_hash"| UsersTable
+    Login -->|"success/failure"| AuditLogger
+    Login --> SessionMgmt
+    Browser -->|"request to /admin"| RBAC
+    RBAC -->|"re-fetch user, verify role"| UsersTable
+    RBAC -->|"authorized"| AdminRoutes
+    RBAC -->|"unauthorized"| AuditLogger
+    AuditLogger --> AuditTable
+    Browser --> ChangePw
+    ChangePw --> UsersTable
+    ChangePw --> AuditLogger
+
+    style RBAC fill:#14532d,color:#fff
+    style UsersTable fill:#14532d,color:#fff
+    style AuditTable fill:#14532d,color:#fff
+    style AuditLogger fill:#14532d,color:#fff

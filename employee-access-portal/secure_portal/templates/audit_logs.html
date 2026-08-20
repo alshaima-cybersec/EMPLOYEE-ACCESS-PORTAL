@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Audit Logs — Secure Portal{% endblock %}
+{% block content %}
+<h1 class="h4 mb-3">Audit Logs</h1>
+<div class="alert alert-success">
+    Every login, failed login, lockout, logout, unauthorized admin access attempt, password
+    change, account enable/disable, role change, and account unlock is recorded here with a
+    timestamp and source IP address.
+</div>
+<div class="card">
+    <div class="card-body p-0">
+        <table class="table mb-0">
+            <thead>
+                <tr><th>Timestamp (UTC)</th><th>User</th><th>Event</th><th>Result</th><th>IP Address</th></tr>
+            </thead>
+            <tbody>
+            {% for log in logs %}
+                <tr>
+                    <td>{{ log.timestamp }}</td>
+                    <td>{{ log.username or "—" }}</td>
+                    <td>{{ log.event_type }}</td>
+                    <td>
+                        <span class="badge {{ 'bg-success' if log.result == 'success' else 'bg-danger' }}">
+                            {{ log.result }}
+                        </span>
+                    </td>
+                    <td>{{ log.ip_address or "—" }}</td>
+                </tr>
+            {% else %}
+                <tr><td colspan="5" class="text-center text-muted">No audit events yet.</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

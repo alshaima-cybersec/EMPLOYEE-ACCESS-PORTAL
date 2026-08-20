@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Home — Secure Portal{% endblock %}
+{% block content %}
+<div class="card">
+    <div class="card-header">Acme Corp Employee Access Portal (Secure Demo)</div>
+    <div class="card-body">
+        <h1 class="h4">Welcome</h1>
+        <p>This is the hardened version of the Employee Access Portal, refactored to mitigate the
+        weaknesses demonstrated in the vulnerable version: weak password storage, weak password
+        policy, broken access control, unlimited login attempts, insecure session handling, and
+        missing audit logging.</p>
+        {% if not user %}
+        <a href="{{ url_for('login') }}" class="btn btn-primary">Login</a>
+        {% else %}
+        <a href="{{ url_for('employee_dashboard') }}" class="btn btn-primary">Go to Dashboard</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

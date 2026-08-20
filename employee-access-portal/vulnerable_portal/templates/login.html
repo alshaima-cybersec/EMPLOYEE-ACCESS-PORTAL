@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Login — Vulnerable Portal{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-5">
+        <div class="card">
+            <div class="card-header">Sign In</div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('login') }}" novalidate>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email address</label>
+                        <input type="email" class="form-control" id="email" name="email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Login</button>
+                </form>
+                <hr>
+                <p class="small text-muted mb-0">
+                    Demo accounts: admin@example.com / admin123 &middot; employee@example.com / password
+                </p>
+                <p class="small text-danger mb-0">
+                    Note: this version accepts unlimited login attempts and gives detailed error
+                    messages that reveal whether an email exists — both intentional weaknesses.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

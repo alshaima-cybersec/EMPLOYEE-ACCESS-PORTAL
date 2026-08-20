@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Employee Dashboard — Vulnerable Portal{% endblock %}
+{% block content %}
+<h1 class="h4 mb-3">Employee Dashboard</h1>
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <div class="stat-card">
+            <div class="text-muted small">Signed in as</div>
+            <div class="h5">{{ user.full_name }}</div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="stat-card">
+            <div class="text-muted small">Role</div>
+            <div class="h5 text-capitalize">{{ user.role }}</div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="stat-card">
+            <div class="text-muted small">Account status</div>
+            <div class="h5">{{ "Active" if user.is_active else "Disabled" }}</div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">Try This Vulnerability</div>
+    <div class="card-body">
+        <p>You are logged in as an <strong>employee</strong>. In a correctly secured application,
+        navigating directly to the admin dashboard URL should be blocked. In this vulnerable
+        version, try visiting:</p>
+        <p><code>{{ request.host_url }}admin</code></p>
+        <p class="mb-0">Notice that the server does not verify your role before rendering the page.</p>
+    </div>
+</div>
+{% endblock %}
